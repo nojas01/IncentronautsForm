@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Col, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Form>
+        <FormGroup row>
+          <Label for="exampleEmail" sm={2}>Email</Label>
+          <Col sm={10}>
+            <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="examplePassword" sm={2}>Password</Label>
+          <Col sm={10}>
+            <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" />
+          </Col>
+        </FormGroup>
+      </Form>
     </div>
   );
 }
