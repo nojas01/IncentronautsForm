@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './App.css';
 import {
     Col,
     Button,
-    Form,
     FormGroup,
     Label,
 } from 'reactstrap';
@@ -21,16 +20,32 @@ interface FormInput {
 
 function App() {
     const {register, errors, handleSubmit} = useForm<FormInput>();
-    const submitForm               = (formData: FormInput) => {
-        console.log('foobar');
+    const incentronautsForm = useRef<HTMLFormElement>(null)
+    const submitForm                       = async (formData: FormInput) => {
+        const response = await fetch('https://mockbin.org/request', {
+                method:  'POST',
+                mode:    'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:    JSON.stringify(formData),
+            },
+        );
+        const responseJson = await  response.json();
+        console.log('responseJson', response.status);
+        if (response.status === 200 && null !== incentronautsForm.current) {
+            incentronautsForm.current.reset()
+        }
+        return responseJson;
     };
-
-    console.log('errors', errors);
 
     return (
         <div className={'container'}>
             <Col sm={6} className={'offset-sm-3'}>
-                <Form onSubmit={handleSubmit(submitForm)}>
+                <form
+                    onSubmit={handleSubmit(submitForm)}
+                    ref={incentronautsForm}
+                >
                     <FormGroup row>
                         <Label for="initials" sm={3}>Initialen</Label>
                         <Col sm={9}>
@@ -136,20 +151,20 @@ function App() {
                                 ref={register({
                                     required: 'Dit veld is verplicht',
                                     pattern:  {
-                                        value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                        value:   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                                         message: 'Ongeldig email adres',
                                     },
                                 })}
                             />
                             {errors.email &&
-                                <span className={'errorText'}>{errors.email.message}</span>
+                            <span className={'errorText'}>{errors.email.message}</span>
                             }
                         </Col>
                     </FormGroup>
                     <FormGroup row>
-                            <Button className={'w-100 buttonColor'}>Submit</Button>
+                        <Button className={'w-100 buttonColor'}>Submit</Button>
                     </FormGroup>
-                </Form>
+                </form>
             </Col>
         </div>
     );
