@@ -2,3 +2,12 @@
   align-items: center;
   justify-content: center;
 }
+
+.buttonColor {
+  background-color: #fe5000!important;
+}
+
+.errorText {
+  color: red;
+  font-size: .8rem;
+}
