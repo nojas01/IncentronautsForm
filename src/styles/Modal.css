@@ -5,7 +5,7 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: #000000B3;
+    background-color: #00000080;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,5 +14,5 @@
 .spinner {
     width: 3rem;
     height: 3rem;
-    color: white;
+    color: #fe5000;
 }

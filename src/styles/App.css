@@ -1,13 +1,9 @@
 .container {
   align-items: center;
   justify-content: center;
+  font-family: Work Sans, sans-serif;
 }
 
-.buttonColor {
-  background-color: #fe5000!important;
-}
-
-.errorText {
-  color: red;
-  font-size: .8rem;
+.introText {
+  margin-top: 2rem;
 }

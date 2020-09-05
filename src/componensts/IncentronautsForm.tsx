@@ -9,6 +9,7 @@ import React, {
     RefObject,
 } from 'react';
 import { useForm } from 'react-hook-form';
+import '../styles/IncentronautsForm.css'
 
 export interface FormInput {
     initials: string;

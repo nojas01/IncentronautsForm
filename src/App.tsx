@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import IncentronautsForm, {  FormInput } from './componensts/IncentronautsForm';
 import Modal from './componensts/Modal';
+import Logo from './componensts/Logo';
 
 function App() {
     const incentronautsForm = useRef<HTMLFormElement>(null)
@@ -33,6 +34,15 @@ function App() {
 
     return (
         <div className={'container'}>
+            <Col sm={6} className={'offset-sm-3'}>
+            <Logo
+                color={'#fe5000'}
+            />
+            <p className={'introText'}>
+                Nu word je straks aangenomen als Incentronaut en ga je knallen bij de klant. Te gek! wel
+                hebben we nog wat informatie van je nodig. Hiervoor willen we je vragen het volgende formulier in te vullen.
+            </p>
+            </Col>
             <Col sm={6} className={'offset-sm-3'}>
                <IncentronautsForm
                    submitForm={submitForm}
