@@ -1,13 +1,22 @@
-import React, { ReactElement } from 'react';
+import React, {
+    ReactElement,
+    ReactNode,
+} from 'react';
 import { Spinner } from 'reactstrap';
 import '../styles/Modal.css'
 
+interface ModalProps {
+    children?: ReactNode;
+}
 
-function Modal():ReactElement {
+function Modal({children}: ModalProps):ReactElement {
 
     return (
         <div className={'modalContainer'}>
-            <Spinner className={'spinner'} />
+            {children ?
+                children :
+                <Spinner className={'spinner'}/>
+            }
         </div>
     )
 }

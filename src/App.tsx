@@ -1,4 +1,5 @@
 import React, {
+    ReactElement,
     useRef,
     useState,
 } from 'react';
@@ -6,16 +7,21 @@ import './styles/App.css';
 import {
     Col,
 } from 'reactstrap';
-import IncentronautsForm, {  FormInput } from './componensts/IncentronautsForm';
+import IncentronautsForm, { FormInput } from './componensts/IncentronautsForm';
 import Modal from './componensts/Modal';
 import Logo from './componensts/Logo';
+import ApiResponseMessage from './componensts/ApiResponseMessage';
 
-function App() {
-    const incentronautsForm = useRef<HTMLFormElement>(null)
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const submitForm                       = async (formData: FormInput) => {
+
+function App(): ReactElement {
+    const incentronautsForm                = useRef<HTMLFormElement>(null);
+    const [modalVisible, setModalVisible]  = useState<boolean>(false);
+    const [formSentToApi, setFormSentToApi] = useState<boolean>(false);
+    const [apiError, setApiError]          = useState<boolean>(false);
+
+    const submitForm = (formData: FormInput) => {
         setModalVisible(true);
-        const response = await fetch('https://mockbin.org/request', {
+        fetch('https://mockbin.org/request', {
                 method:  'POST',
                 mode:    'cors',
                 headers: {
@@ -23,33 +29,65 @@ function App() {
                 },
                 body:    JSON.stringify(formData),
             },
-        );
-        const responseJson = await  response.json();
-        if (response.status === 200 && null !== incentronautsForm.current) {
-            incentronautsForm.current.reset()
+        ).then((response) => {
+            if (!response.ok) {
+                throw new Error('Api request failed');
+            }
+            setFormSentToApi(true);
+            return;
+        }).catch(error => {
+            console.log('error', error);
+            setApiError(true);
+        });
+    };
+
+    const closeModal = () => {
+        // if error don't reset the form && Check if the ref exists.
+        if (!apiError && null !== incentronautsForm.current) {
+            incentronautsForm.current.reset();
         }
+        // reset modal props
+        setApiError(false);
+        setFormSentToApi(false);
         setModalVisible(false);
-        return responseJson;
     };
 
     return (
         <div className={'container'}>
             <Col sm={6} className={'offset-sm-3'}>
-            <Logo
-                color={'#fe5000'}
-            />
-            <p className={'introText'}>
-                Nu word je straks aangenomen als Incentronaut en ga je knallen bij de klant. Te gek! wel
-                hebben we nog wat informatie van je nodig. Hiervoor willen we je vragen het volgende formulier in te vullen.
-            </p>
+                <Logo
+                    color={'#fe5000'}
+                />
+                <p className={'introText'}>
+                    Nu word je straks aangenomen als Incentronaut en ga je knallen bij de klant. Te gek! wel
+                    hebben we nog wat informatie van je nodig. Hiervoor willen we je vragen het volgende formulier in te
+                    vullen.
+                </p>
             </Col>
             <Col sm={6} className={'offset-sm-3'}>
-               <IncentronautsForm
-                   submitForm={submitForm}
-                   formRef={incentronautsForm}
-               />
+                <IncentronautsForm
+                    submitForm={submitForm}
+                    formRef={incentronautsForm}
+                />
                 {modalVisible &&
-                    <Modal />
+                <Modal>
+                    {formSentToApi &&
+                        <ApiResponseMessage
+                            message={'We hebben je formulier ontvangen. We komen zo spoedig mogelijk bij je terug'}
+                            buttonText={'Klik hier om terug te gaan'}
+                            color={'#fe5000'}
+                            handleButtonPress={closeModal}
+                        />
+                    }
+                    {apiError &&
+                        <ApiResponseMessage
+                            message={'Oeps er ging iets mis, probeer het later opnieuw'}
+                            buttonText={'Klik hier om terug te gaan'}
+                            color={'red'}
+                            handleButtonPress={closeModal}
+                        />
+                    }
+                </Modal>
                 }
             </Col>
         </div>
@@ -57,14 +95,3 @@ function App() {
 }
 
 export default App;
-
-
-//
-// ● Voorletters (verplicht)
-// ● Tussenvoegsel
-// ● Achternaam (verplicht)
-// ● Postcode (verplicht, validatiecheck)
-// ● Straatnaam (wordt opgehaald via een postcode check)
-// ● Stad (wordt opgehaald via een postcodecheck)
-// ● Huisnummer (verplicht, alleen nummers)
-// ● E-mailadres (verplicht, validatie check)

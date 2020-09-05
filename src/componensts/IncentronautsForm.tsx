@@ -150,7 +150,7 @@ function IncentronautsForm({submitForm, formRef}: FormProps): ReactElement {
                 </Col>
             </FormGroup>
             <FormGroup row>
-                <Button className={'w-100 buttonColor'}>Submit</Button>
+                <Button className={'w-100 buttonColor mx-3'}>Submit</Button>
             </FormGroup>
         </form>
     )
