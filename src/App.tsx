@@ -18,6 +18,8 @@ function App(): ReactElement {
     const [modalVisible, setModalVisible]  = useState<boolean>(false);
     const [formSentToApi, setFormSentToApi] = useState<boolean>(false);
     const [apiError, setApiError]          = useState<boolean>(false);
+    const [city, setCity] = useState<string>('');
+    const [street, setStreet] = useState<string>('');
 
     const submitForm = (formData: FormInput) => {
         setModalVisible(true);
@@ -34,12 +36,18 @@ function App(): ReactElement {
                 throw new Error('Api request failed');
             }
             setFormSentToApi(true);
+
             return;
         }).catch(error => {
             console.log('error', error);
             setApiError(true);
         });
     };
+
+    const updateDefaultValues = ({city, street}:{city: string, street:string}) => {
+            setCity(city);
+            setStreet(street);
+    }
 
     const closeModal = () => {
         // if error don't reset the form && Check if the ref exists.
@@ -66,6 +74,9 @@ function App(): ReactElement {
             </Col>
             <Col sm={6} className={'offset-sm-3'}>
                 <IncentronautsForm
+                    updateDefaultValues={updateDefaultValues}
+                    street={street}
+                    city={city}
                     submitForm={submitForm}
                     formRef={incentronautsForm}
                 />
